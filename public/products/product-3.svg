@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FAFAF7"/>
+      <stop offset="100%" style="stop-color:#F0E6D6"/>
+    </linearGradient>
+    <linearGradient id="bottle3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#C8D8E8"/>
+      <stop offset="50%" style="stop-color:#E8F0F5"/>
+      <stop offset="100%" style="stop-color:#B8C8D8"/>
+    </linearGradient>
+    <linearGradient id="cap3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E4C97A"/>
+      <stop offset="100%" style="stop-color:#D4AF37"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#bg3)"/>
+  <!-- Tall slim bottle -->
+  <rect x="160" y="160" width="80" height="220" rx="40" fill="url(#bottle3)" stroke="#C8D8E8" stroke-width="1"/>
+  <!-- Neck -->
+  <rect x="185" y="130" width="30" height="38" rx="6" fill="#D8E8F0"/>
+  <!-- Cap -->
+  <rect x="178" y="105" width="44" height="32" rx="10" fill="url(#cap3)"/>
+  <!-- Label -->
+  <rect x="167" y="210" width="66" height="110" rx="5" fill="rgba(255,255,255,0.55)" stroke="rgba(212,175,55,0.5)" stroke-width="0.8"/>
+  <text x="200" y="238" font-family="Georgia,serif" font-size="11" fill="#1C1008" text-anchor="middle" letter-spacing="3">NORELLE</text>
+  <line x1="175" y1="245" x2="225" y2="245" stroke="#D4AF37" stroke-width="0.7"/>
+  <text x="200" y="260" font-family="Georgia,serif" font-size="8" fill="#7A5E47" text-anchor="middle" letter-spacing="2">OCEAN IRIS</text>
+  <text x="200" y="275" font-family="Georgia,serif" font-size="7" fill="#B09278" text-anchor="middle">Eau de Toilette</text>
+  <text x="200" y="289" font-family="Georgia,serif" font-size="7" fill="#B09278" text-anchor="middle">100ml</text>
+  <!-- Shine -->
+  <rect x="166" y="170" width="10" height="100" rx="5" fill="rgba(255,255,255,0.4)"/>
+  <!-- Shadow -->
+  <ellipse cx="200" cy="393" rx="45" ry="6" fill="rgba(140,90,40,0.08)"/>
+</svg>

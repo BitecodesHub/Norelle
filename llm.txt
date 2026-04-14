@@ -1,0 +1,130 @@
+# llm.txt — Norelle Luxury Perfume Platform
+
+## Project Summary
+Norelle is a production-ready luxury perfume eCommerce platform built with Next.js 14 (App Router), MongoDB (Mongoose), Razorpay payments, NextAuth.js v5 authentication, Tailwind CSS, Framer Motion, and React Three Fiber for 3D elements.
+
+## Brand Identity
+- **Brand Name**: Norelle
+- **Tagline**: Scent of Presence
+- **Aesthetic**: Minimalist luxury — black (#0E0E0E), soft beige (#E8DCCB), gold (#D4AF37)
+- **Typography**: Cormorant Garamond (serif headings) + Inter (sans-serif body)
+- **Design Language**: Glassmorphism navbar, claymorphism product cards, GSAP hero animations, 3D perfume bottle (R3F)
+- **Target Market**: Luxury fragrance buyers; local SEO focus on Ahmedabad, India
+
+## Technology Stack
+- **Framework**: Next.js 16.2.3 (App Router, TypeScript)
+- **Database**: MongoDB via Mongoose ODM
+- **Auth**: NextAuth.js v5 (beta) — Email/Password + Google OAuth
+- **Payments**: Razorpay (order creation + HMAC signature verification)
+- **Styling**: Tailwind CSS v4
+- **Animations**: Framer Motion + GSAP
+- **3D**: React Three Fiber + Drei (glass perfume bottle with gold lighting)
+- **State**: Zustand (cart persisted to localStorage)
+- **Validation**: Zod (server + client)
+- **Image CDN**: Cloudinary
+- **Runtime**: Node.js (all API routes), Edge (middleware only, no DB)
+
+## User Roles
+| Role     | Permissions |
+|----------|-------------|
+| USER     | Browse, cart, checkout, orders, account |
+| SALESMAN | Create/manage own coupon codes, view coupon analytics |
+| ADMIN    | Full access — products CRUD, orders, users, all coupons |
+
+## Key Features
+1. **3D Hero**: Black screen → GSAP letter-by-letter reveal → rotating glass perfume bottle (R3F) → tagline fade-in → CTA
+2. **Coupon System**: Salesman creates codes (PERCENTAGE or FLAT discount), configures min order, expiry, max uses. Validated server-side on checkout.
+3. **Razorpay Integration**: Full flow — create order → open Razorpay modal → HMAC SHA256 verify → mark order PAID → increment coupon usage
+4. **Role-Based Middleware**: Edge-safe (no mongoose in middleware) split-config pattern with NextAuth v5
+5. **SEO**: Dynamic `generateMetadata`, JSON-LD schemas (Product, LocalBusiness), sitemap.ts, robots.ts, Ahmedabad local SEO pages
+
+## Directory Structure
+```
+src/
+├── app/
+│   ├── page.tsx                          # Homepage (SSR)
+│   ├── shop/page.tsx                     # Product listing (SSR)
+│   ├── shop/[slug]/page.tsx              # Product detail (SSR + JSON-LD)
+│   ├── checkout/page.tsx                 # Checkout with Razorpay
+│   ├── order-success/page.tsx            # Post-payment confirmation
+│   ├── login/page.tsx                    # Credentials + Google login
+│   ├── register/page.tsx                 # Account creation
+│   ├── account/orders/page.tsx           # Order history
+│   ├── admin/page.tsx                    # Admin dashboard
+│   ├── admin/products/page.tsx           # Product CRUD
+│   ├── salesman/page.tsx                 # Salesman coupon dashboard
+│   ├── salesman/coupons/new/page.tsx     # Create coupon form
+│   ├── perfume-shop-ahmedabad/page.tsx   # Local SEO (LocalBusiness JSON-LD)
+│   ├── best-attar-ahmedabad/page.tsx     # Local SEO
+│   ├── sitemap.ts                        # Dynamic sitemap
+│   ├── robots.ts                         # robots.txt
+│   └── api/
+│       ├── auth/[...nextauth]/route.ts   # NextAuth handler
+│       ├── auth/register/route.ts        # User registration
+│       ├── products/route.ts             # GET all / POST create
+│       ├── coupons/route.ts              # GET (role-scoped) / POST create
+│       ├── coupons/validate/route.ts     # POST validate coupon
+│       ├── razorpay/route.ts             # POST create-order / PUT verify
+│       └── admin/products/[id]/route.ts  # DELETE / PATCH product
+├── components/
+│   ├── layout/Navbar.tsx                 # Glassmorphism sticky navbar
+│   ├── layout/Footer.tsx                 # Brand footer with SEO links
+│   ├── home/HeroSection.tsx             # GSAP + 3D hero sequence
+│   ├── home/FeaturedProducts.tsx        # Featured product grid
+│   ├── home/BrandStory.tsx              # Parallax brand section
+│   ├── three/PerfumeBottle3D.tsx        # R3F 3D bottle component
+│   ├── shop/ShopClient.tsx              # Interactive product grid
+│   ├── product/ProductDetail.tsx        # Gallery, notes pyramid, reviews
+│   ├── cart/CartDrawer.tsx              # Animated slide-in cart
+│   ├── admin/AdminDeleteProduct.tsx     # Client delete button
+│   ├── Providers.tsx                    # NextAuth SessionProvider
+│   └── OrderSuccessClient.tsx           # Order confirmation UI
+├── lib/
+│   ├── mongoose.ts     # MongoDB connection (serverless cache)
+│   ├── auth.ts         # Full NextAuth config (server-side only)
+│   ├── auth.config.ts  # Edge-safe NextAuth config (middleware)
+│   ├── razorpay.ts     # Razorpay instance
+│   └── validations.ts  # Zod schemas
+├── models/
+│   ├── User.ts         # role: USER | SALESMAN | ADMIN
+│   ├── Product.ts      # title, slug, price, notes, images
+│   ├── Order.ts        # items snapshot, payment status, razorpay fields
+│   ├── Coupon.ts       # code, type, value, createdBy (salesman), expiry
+│   └── Review.ts       # product, user, rating, comment
+├── store/
+│   └── cartStore.ts    # Zustand cart + coupon state (persisted)
+└── middleware.ts        # Edge-safe route protection
+```
+
+## Environment Variables Required
+```
+MONGODB_URI=                    # MongoDB connection string
+NEXTAUTH_SECRET=                # Random secret (openssl rand -base64 32)
+NEXTAUTH_URL=http://localhost:3000
+GOOGLE_CLIENT_ID=               # Optional: Google OAuth
+GOOGLE_CLIENT_SECRET=           # Optional: Google OAuth
+RAZORPAY_KEY_ID=                # Razorpay API key
+RAZORPAY_KEY_SECRET=            # Razorpay secret key
+CLOUDINARY_URL=                 # Cloudinary for image uploads
+```
+
+## Getting Started
+```bash
+# 1. Fill in .env.local
+# 2. Start MongoDB (local or cloud)
+cd norelle
+npm run dev          # Development
+npm run build        # Production build
+
+# Seed sample products:
+npm install -D tsx
+npx tsx scripts/seed.ts
+```
+
+## SEO Keywords Targeted
+- Perfume shop in Ahmedabad
+- Luxury perfumes Ahmedabad
+- Best attar in Ahmedabad  
+- Buy ittar online Gujarat
+- Eau de Parfum India
+- Premium fragrance brand India

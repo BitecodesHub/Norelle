@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+/* Override Tailwind v4 default font variables */
+@layer base {
+  :root {
+    --font-geist-sans: "Inter", sans-serif;
+    --font-geist-mono: "Courier New", monospace;
+  }
+}
+
+:root {
+  --background: #FAFAF7;
+  --foreground: #1C1008;
+  --accent: #E8DCCB;
+  --gold: #D4AF37;
+  --gold-light: #E4C97A;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-parchment: #FAFAF7;
+  --color-charcoal: #F5EDE0;
+  --color-charcoal-light: #EDE3D5;
+  --color-cream: #1C1008;
+  --color-tan: #E2D0BC;
+  --color-mocha: #7A5E47;
+  --color-latte: #B09278;
+  --color-noir: #0E0E0E;
+  --color-beige: #E8DCCB;
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #FAFAF7;
+  color: #1C1008;
+  font-family: Inter, system-ui, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Light Glassmorphism */
+.glass {
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(196, 165, 120, 0.22);
+}
+
+.glass-card {
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(196, 165, 120, 0.25);
+  box-shadow: 0 4px 24px rgba(140, 90, 40, 0.08);
+}
+
+/* Gold gradient text */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #D4AF37, #E4C97A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #F5EDE0; }
+::-webkit-scrollbar-thumb { background: #C4A882; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+
+/* Selection color */
+::selection {
+  background: rgba(212, 175, 55, 0.2);
+  color: #1C1008;
+}
