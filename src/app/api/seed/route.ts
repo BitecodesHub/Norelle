@@ -14,7 +14,7 @@ const dummyProducts = [
     images: [
       "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&q=85",
     ],
-    category: "EAU_DE_PARFUM",
+    category: "PERFUME",
     stock: 42,
     featured: true,
     notes: {
@@ -40,7 +40,7 @@ const dummyProducts = [
     ],
     category: "ATTAR",
     stock: 28,
-    featured: true,
+    featured: false,
     notes: {
       top: "White Musk, Bergamot, Aldehydes",
       heart: "Ambergris, Orris Root, Labdanum",
@@ -62,7 +62,7 @@ const dummyProducts = [
     images: [
       "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=800&q=85",
     ],
-    category: "EAU_DE_TOILETTE",
+    category: "PERFUME",
     stock: 55,
     featured: true,
     notes: {
@@ -86,7 +86,7 @@ const dummyProducts = [
     images: [
       "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&q=85",
     ],
-    category: "EAU_DE_PARFUM",
+    category: "PERFUME",
     stock: 37,
     featured: true,
     notes: {
@@ -134,7 +134,7 @@ const dummyProducts = [
     images: [
       "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=800&q=85",
     ],
-    category: "EAU_DE_PARFUM",
+    category: "PERFUME",
     stock: 30,
     featured: false,
     notes: {
@@ -158,7 +158,7 @@ const dummyProducts = [
     images: [
       "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800&q=85",
     ],
-    category: "EAU_DE_TOILETTE",
+    category: "PERFUME",
     stock: 22,
     featured: false,
     notes: {

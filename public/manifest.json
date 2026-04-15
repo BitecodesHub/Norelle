@@ -1,0 +1,16 @@
+{
+  "name": "Norelle — Luxury Perfumes & Attar",
+  "short_name": "Norelle",
+  "description": "Premium luxury perfumes and natural attars in Ahmedabad. Shop online with free delivery.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAFAF7",
+  "theme_color": "#D4AF37",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

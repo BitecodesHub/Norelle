@@ -24,7 +24,7 @@ export const productSchema = z.object({
   description: z.string().min(10, "Description too short"),
   price: z.number().positive("Price must be positive"),
   comparePrice: z.number().positive().optional(),
-  category: z.enum(["EAU_DE_PARFUM", "EAU_DE_TOILETTE", "ATTAR", "BODY_MIST"]),
+  category: z.enum(["PERFUME", "ATTAR"]),
   stock: z.number().int().nonnegative(),
   notes: z.object({
     top: z.string(),
@@ -49,8 +49,8 @@ export const couponSchema = z.object({
     .number()
     .positive()
     .refine((v) => v <= 100, "Percentage cannot exceed 100"),
-  minOrderAmount: z.number().nonnegative().default(0),
-  maxUses: z.number().int().positive().default(100),
+  minOrderAmount: z.number().nonnegative(),
+  maxUses: z.number().int().positive(),
   validFrom: z.string(),
   validUntil: z.string(),
 });

@@ -13,7 +13,7 @@ export interface IProduct extends Document {
   price: number;
   comparePrice?: number;
   images: string[];
-  category: "EAU_DE_PARFUM" | "EAU_DE_TOILETTE" | "ATTAR" | "BODY_MIST";
+  category: "PERFUME" | "ATTAR";
   stock: number;
   notes: IProductNote;
   longevity: string;
@@ -41,7 +41,7 @@ const ProductSchema = new Schema<IProduct>(
     images: [{ type: String }],
     category: {
       type: String,
-      enum: ["EAU_DE_PARFUM", "EAU_DE_TOILETTE", "ATTAR", "BODY_MIST"],
+      enum: ["PERFUME", "ATTAR"],
       required: true,
     },
     stock: { type: Number, default: 0, min: 0 },

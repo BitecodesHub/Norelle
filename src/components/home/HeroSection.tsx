@@ -1,65 +1,68 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 
+/* ─────────────────────────────────────────────────────── types & data ── */
 type Phase = "intro" | "letters" | "hold" | "morph" | "content" | "done";
 const LETTERS = "NORELLE".split("");
-const SLIDE_DURATION = 5500; // ms per slide
+const SLIDE_DURATION = 5500;
 
 const SLIDES = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1920&q=90",
-    tag: "New Season · 2024",
-    title: "The Scent",
-    italic: "of Presence",
-    body: "Luxury fragrances crafted for those who leave an impression before they speak.",
-    cta1: { label: "Shop Collection", href: "/shop" },
+    image: "/Hero/Norelle Female model .png",
+    tag: "Handcrafted · Ahmedabad",
+    title: "A scent that",
+    italic: "stays with you",
+    body: "Not mass-produced. Not generic. Every bottle is blended by hand — made to last on your skin, not just on paper.",
+    cta1: { label: "Shop Now", href: "/shop" },
     cta2: { label: "Our Story", href: "/about" },
     gradient: "bg-gradient-to-r from-noir/80 via-noir/45 to-transparent",
     align: "left" as const,
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=1920&q=90",
-    tag: "Ancient Craft · Modern Soul",
-    title: "Pure Attar,",
-    italic: "Timeless Art",
-    body: "Slow-distilled in copper degs using traditions unchanged for four centuries. Lasts 24+ hours.",
-    cta1: { label: "Discover Attars", href: "/shop?category=ATTAR" },
+    image: "/Hero/Norelle Male Model.png",
+    tag: "Pure Attar · Copper-Distilled",
+    title: "The same way,",
+    italic: "for 400 years",
+    body: "Rose, oud, sandalwood — slow-distilled in copper degs, the way it's always been done. Wears all day. Nothing added.",
+    cta1: { label: "Explore Attars", href: "/shop?category=ATTAR" },
     cta2: null,
     gradient: "bg-gradient-to-r from-noir/75 via-noir/40 to-transparent",
     align: "left" as const,
   },
-  {
-    id: 3,
-    image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=1920&q=90",
-    tag: "100% Natural Ingredients",
-    title: "Nothing",
-    italic: "Artificial",
-    body: "Every ingredient listed on every bottle. Transparency is a luxury we refuse to compromise.",
-    cta1: { label: "Our Philosophy", href: "/about" },
-    cta2: null,
-    gradient: "bg-gradient-to-r from-noir/80 via-noir/50 to-transparent",
-    align: "left" as const,
-  },
-  {
-    id: 4,
-    image: "https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=1920&q=90",
-    tag: "Made in Ahmedabad",
-    title: "Local Roots.",
-    italic: "Global Soul.",
-    body: "Born in Gujarat's richest city of craft. Perfumery as heritage, not just commerce.",
-    cta1: { label: "Our Heritage", href: "/about" },
-    cta2: { label: "Shop Now", href: "/shop" },
-    gradient: "bg-gradient-to-r from-noir/85 via-noir/50 to-transparent",
-    align: "left" as const,
-  },
 ];
 
+/* ────────────────────────────────────────────── Stagger variants ── */
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.10, delayChildren: 0.05 },
+  },
+  exit: {
+    transition: { staggerChildren: 0.05, staggerDirection: -1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 22 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
+  },
+  exit: {
+    opacity: 0,
+    y: -14,
+    transition: { duration: 0.35, ease: [0.55, 0, 1, 0.45] },
+  },
+};
+
+/* ═══════════════════════════════════ Root export ═══════════════════════ */
 export default function HeroSection() {
   const [phase, setPhase] = useState<Phase>("intro");
   const [skipIntro, setSkipIntro] = useState(false);
@@ -79,6 +82,7 @@ export default function HeroSection() {
     return id;
   }, []);
 
+  /* Check session storage — skip intro on revisit */
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (sessionStorage.getItem("norelle-intro") === "1") {
@@ -89,12 +93,17 @@ export default function HeroSection() {
     }
   }, []);
 
+  /* Intro sequence timing */
   useEffect(() => {
     if (skipIntro) return;
     if (heroLogoRef.current) {
-      gsap.set(heroLogoRef.current, { xPercent: -50, yPercent: -50, top: "50%", left: "50%", opacity: 0, scale: 1 });
+      gsap.set(heroLogoRef.current, {
+        xPercent: -50, yPercent: -50,
+        top: "50%", left: "50%",
+        opacity: 0, scale: 1,
+      });
     }
-    after(400, () => setPhase("letters"));
+    after(400,  () => setPhase("letters"));
     after(2400, () => setPhase("hold"));
     after(2900, () => setPhase("morph"));
     after(3200, () => setPhase("content"));
@@ -102,23 +111,29 @@ export default function HeroSection() {
     return clearTimers;
   }, [skipIntro, after, clearTimers]);
 
+  /* Letter stagger reveal */
   useEffect(() => {
     if (phase !== "letters" || !heroLogoRef.current) return;
     gsap.to(heroLogoRef.current, { opacity: 1, duration: 0.3 });
     lettersRef.current.forEach((el, i) => {
       if (!el) return;
-      gsap.fromTo(el,
+      gsap.fromTo(
+        el,
         { opacity: 0, y: 80, filter: "blur(16px)", scale: 0.85 },
-        { opacity: 1, y: 0, filter: "blur(0px)", scale: 1, delay: i * 0.11, duration: 0.85, ease: "power3.out" }
+        {
+          opacity: 1, y: 0, filter: "blur(0px)", scale: 1,
+          delay: i * 0.11, duration: 0.85, ease: "power3.out",
+        }
       );
     });
   }, [phase]);
 
+  /* Logo morph into navbar */
   useEffect(() => {
     if (phase !== "morph" || !heroLogoRef.current) return;
     const navLogo = document.querySelector("[data-navbar-logo]") as HTMLElement | null;
     if (!navLogo) return;
-    const navRect = navLogo.getBoundingClientRect();
+    const navRect  = navLogo.getBoundingClientRect();
     const heroRect = heroLogoRef.current.getBoundingClientRect();
     const targetScale = navRect.height / (heroRect.height || 1);
     gsap.to(heroLogoRef.current, {
@@ -129,7 +144,9 @@ export default function HeroSection() {
       ease: "expo.inOut",
       onComplete: () => {
         gsap.to(heroLogoRef.current, {
-          opacity: 0, duration: 0.35, ease: "power2.in",
+          opacity: 0,
+          duration: 0.35,
+          ease: "power2.in",
           onComplete: () => {
             sessionStorage.setItem("norelle-intro", "1");
             window.dispatchEvent(new CustomEvent("norelle-intro-complete"));
@@ -143,21 +160,29 @@ export default function HeroSection() {
 
   return (
     <section className="relative w-full min-h-screen overflow-hidden bg-noir">
-      {/* Black backdrop while intro plays */}
       {(phase === "intro" || phase === "letters" || phase === "hold") && (
         <div className="absolute inset-0 bg-noir z-0" />
       )}
 
-      {/* Intro logo overlay */}
+      {/* Floating letter intro */}
       {phase !== "done" && (
-        <div ref={heroLogoRef} className="fixed z-[90] pointer-events-none select-none" aria-hidden="true">
+        <div
+          ref={heroLogoRef}
+          className="fixed z-[90] pointer-events-none select-none"
+          aria-hidden="true"
+        >
           <div className="flex">
             {LETTERS.map((letter, i) => (
               <span
                 key={i}
                 ref={(el) => { lettersRef.current[i] = el; }}
                 className="font-serif leading-none text-white"
-                style={{ fontSize: "clamp(3.5rem, 11vw, 9rem)", letterSpacing: "0.2em", display: "inline-block", opacity: 0 }}
+                style={{
+                  fontSize: "clamp(3.5rem, 11vw, 9rem)",
+                  letterSpacing: "0.2em",
+                  display: "inline-block",
+                  opacity: 0,
+                }}
               >
                 {letter}
               </span>
@@ -166,10 +191,15 @@ export default function HeroSection() {
         </div>
       )}
 
-      {/* Carousel appears after intro */}
       <AnimatePresence>
         {(phase === "content" || phase === "done") && (
-          <motion.div key="carousel" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }} className="w-full h-full">
+          <motion.div
+            key="carousel"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7 }}
+            className="w-full h-full"
+          >
             <HeroCarousel />
           </motion.div>
         )}
@@ -178,13 +208,54 @@ export default function HeroSection() {
   );
 }
 
-// ── Full-screen autoscroll carousel ──
+/* ═══════════════════════════════ HeroCarousel ══════════════════════════ */
 function HeroCarousel({ immediate = false }: { immediate?: boolean }) {
   const [current, setCurrent] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const progressRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [progress, setProgress]  = useState(0);
+  const intervalRef  = useRef<ReturnType<typeof setInterval> | null>(null);
+  const progressRef  = useRef<ReturnType<typeof setInterval> | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  /* ── Cursor parallax (desktop only) ── */
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const springCfg = { stiffness: 55, damping: 22, mass: 0.6 };
+  const cursorX = useSpring(rawX, springCfg);
+  const cursorY = useSpring(rawY, springCfg);
+
+  /* Background drifts opposite to cursor for subtle depth */
+  const bgX = useTransform(cursorX, [-0.5, 0.5], ["-1.2%", "1.2%"]);
+  const bgY = useTransform(cursorY, [-0.5, 0.5], ["-0.8%", "0.8%"]);
+  /* Content tilts very slightly with cursor */
+  const contentX = useTransform(cursorX, [-0.5, 0.5], ["-6px", "6px"]);
+  const contentY = useTransform(cursorY, [-0.5, 0.5], ["-4px", "4px"]);
+
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      rawX.set((e.clientX / w) - 0.5);
+      rawY.set((e.clientY / h) - 0.5);
+    };
+    // Only attach on non-touch devices
+    if (window.matchMedia("(hover: hover)").matches) {
+      window.addEventListener("mousemove", handleMove, { passive: true });
+    }
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, [rawX, rawY]);
+
+  /* Scroll parallax — moves bg up as user scrolls */
+  const scrollY = useMotionValue(0);
+  const bgScrollY = useSpring(scrollY, { stiffness: 40, damping: 20, mass: 0.5 });
+  const bgParallaxY = useTransform(bgScrollY, [0, 600], ["0%", "8%"]);
+
+  useEffect(() => {
+    const handleScroll = () => scrollY.set(window.scrollY);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrollY]);
+
+  /* ── Slide navigation ── */
   const goTo = useCallback((idx: number) => {
     setCurrent(idx);
     setProgress(0);
@@ -193,13 +264,11 @@ function HeroCarousel({ immediate = false }: { immediate?: boolean }) {
   const next = useCallback(() => goTo((current + 1) % SLIDES.length), [current, goTo]);
   const prev = useCallback(() => goTo((current - 1 + SLIDES.length) % SLIDES.length), [current, goTo]);
 
-  // Auto-advance
   useEffect(() => {
     intervalRef.current = setInterval(next, SLIDE_DURATION);
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [next]);
 
-  // Progress bar tick (every 50ms)
   useEffect(() => {
     setProgress(0);
     progressRef.current = setInterval(() => {
@@ -211,139 +280,178 @@ function HeroCarousel({ immediate = false }: { immediate?: boolean }) {
   const slide = SLIDES[current];
 
   return (
-    <div className="relative w-full min-h-screen overflow-hidden">
-      {/* ── Background images (crossfade) ── */}
+    <div ref={containerRef} className="relative w-full min-h-screen overflow-hidden">
+
+      {/* ── Background layer (cursor + scroll parallax) ── */}
       <AnimatePresence mode="sync">
         <motion.div
           key={slide.id}
-          initial={{ opacity: 0, scale: 1.04 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.1, ease: "easeInOut" }}
+          initial={{ opacity: 0, scale: 1.06 }}
+          animate={{ opacity: 1, scale: 1.02 }}
+          exit={{ opacity: 0, scale: 1 }}
+          transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="absolute inset-0"
+          style={{
+            x: bgX,
+            y: bgParallaxY,
+            // Scale slightly beyond bounds to allow parallax room
+            width: "102%",
+            height: "102%",
+            left: "-1%",
+            top: "-1%",
+          }}
         >
-          <Image
-            src={slide.image}
-            alt={slide.italic}
-            fill
-            className="object-cover object-center"
-            sizes="100vw"
-            priority={slide.id === 1}
-          />
-          {/* Overlay gradient */}
+          {/* Idle floating drift for the image */}
+          <motion.div
+            className="absolute inset-0"
+            animate={{ y: [0, -6, 0], x: [0, 3, 0] }}
+            transition={{ duration: 9, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+          >
+            <Image
+              src={slide.image}
+              alt={slide.italic}
+              fill
+              className="object-cover object-center"
+              sizes="100vw"
+              priority={slide.id === 1}
+            />
+          </motion.div>
+
+          {/* Side gradient overlay */}
           <div className={`absolute inset-0 ${slide.gradient}`} />
-          {/* Bottom fade to parchment */}
-          <div className="absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-noir/60 to-transparent" />
+
+          {/* Subtle vignette for depth */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(14,14,14,0.45)_100%)]" />
+
+          {/* Bottom fade */}
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-noir/65 to-transparent" />
         </motion.div>
       </AnimatePresence>
 
-      {/* ── Text content ── */}
-      <div className="relative z-10 min-h-screen flex flex-col justify-between pt-24">
+      {/* ── Foreground text (subtle inverse cursor drift) ── */}
+      <motion.div
+        className="relative z-10 min-h-screen flex flex-col justify-between pt-24"
+        style={{ x: contentX, y: contentY }}
+      >
         <div className="flex-1 flex items-center">
           <div className="max-w-7xl mx-auto w-full px-6 md:px-12 lg:px-16">
             <AnimatePresence mode="wait">
               <motion.div
                 key={slide.id}
-                initial={immediate && slide.id === 1 ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                exit="exit"
                 className="max-w-xl"
               >
-                {/* Tag */}
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="w-8 h-px bg-gold" />
+                {/* Tag line */}
+                <motion.div variants={itemVariants} className="flex items-center gap-3 mb-6">
                   <p className="text-[10px] tracking-[0.5em] text-gold uppercase font-sans font-medium">
                     {slide.tag}
                   </p>
-                </div>
+                </motion.div>
 
                 {/* Headline */}
-                <h1 className="font-serif font-light leading-[1.0] text-white mb-0" style={{ fontSize: "clamp(3rem, 6.5vw, 5.8rem)" }}>
+                <motion.h1
+                  variants={itemVariants}
+                  className="font-serif font-light leading-[1.0] text-white mb-0"
+                  style={{ fontSize: "clamp(3rem, 6.5vw, 5.8rem)" }}
+                >
                   {slide.title}
                   <br />
                   <span className="italic text-gold">{slide.italic}</span>
-                </h1>
+                </motion.h1>
 
-                {/* Separator */}
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}
-                  className="h-px w-20 bg-gradient-to-r from-gold via-gold/60 to-transparent origin-left mt-7 mb-6"
-                />
-
-                {/* Body */}
-                <p className="font-sans text-base text-white/80 leading-[1.9] max-w-[420px] mb-9">
+                {/* Body copy */}
+                <motion.p
+                  variants={itemVariants}
+                  className="font-sans text-base text-white/80 leading-[1.9] max-w-[420px] mt-7 mb-9"
+                >
                   {slide.body}
-                </p>
+                </motion.p>
 
                 {/* CTAs */}
-                <div className="flex flex-wrap gap-4">
+                <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
+                  {/* Primary button */}
                   <Link
                     href={slide.cta1.href}
-                    className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 bg-gold text-noir font-sans text-xs tracking-[0.3em] uppercase font-semibold rounded-xl overflow-hidden transition-all duration-300 hover:bg-gold-light hover:shadow-gold-glow"
+                    className={[
+                      "group relative inline-flex items-center justify-center gap-2",
+                      "px-8 py-4 bg-gold text-noir font-sans text-xs tracking-[0.3em] uppercase font-semibold",
+                      "rounded-xl overflow-hidden",
+                      "transition-all duration-200",
+                      /* Hover: very slight scale + warm glow */
+                      "hover:scale-[1.03] hover:shadow-[0_0_28px_rgba(212,175,55,0.35)]",
+                      /* Active: slight press-down */
+                      "active:scale-[0.97] active:shadow-none",
+                    ].join(" ")}
                   >
+                    {/* Shimmer sweep */}
+                    <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                     <span className="relative z-10">{slide.cta1.label}</span>
-                    <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                   </Link>
+
+                  {/* Secondary button */}
                   {slide.cta2 && (
                     <Link
                       href={slide.cta2.href}
-                      className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/30 text-white font-sans text-xs tracking-[0.3em] uppercase font-medium rounded-xl hover:border-gold/60 hover:text-gold transition-all duration-300"
+                      className={[
+                        "inline-flex items-center justify-center gap-2",
+                        "px-8 py-4 border border-white/30 text-white font-sans text-xs tracking-[0.3em] uppercase font-medium",
+                        "rounded-xl",
+                        "transition-all duration-200",
+                        "hover:scale-[1.03] hover:border-gold/60 hover:text-gold hover:shadow-[0_0_20px_rgba(212,175,55,0.15)]",
+                        "active:scale-[0.97]",
+                      ].join(" ")}
                     >
                       {slide.cta2.label}
                     </Link>
                   )}
-                </div>
+                </motion.div>
               </motion.div>
             </AnimatePresence>
           </div>
         </div>
 
-        {/* ── Bottom controls ── */}
+        {/* ── Bottom bar ── */}
         <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 lg:px-16 pb-10 flex items-end justify-between gap-6">
-          {/* Slide counter + dots */}
-          <div className="flex items-center gap-4">
-            <span className="font-serif text-sm text-white/50">
-              <span className="text-white">{String(current + 1).padStart(2, "0")}</span>
-              {" / "}
-              {String(SLIDES.length).padStart(2, "0")}
-            </span>
-            <div className="flex items-center gap-2">
-              {SLIDES.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => goTo(i)}
-                  aria-label={`Go to slide ${i + 1}`}
-                  className={`h-px transition-all duration-400 rounded-full ${
-                    i === current ? "w-8 bg-gold" : "w-4 bg-white/30 hover:bg-white/60"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
 
-          {/* Trust badges */}
-          <div className="hidden md:flex items-center gap-8">
+
+          {/* Trust stats */}
+          <motion.div
+            className="hidden md:flex items-center gap-8"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.65 }}
+          >
             {[
-              { value: "50+", label: "Fragrances" },
-              { value: "10K+", label: "Happy Clients" },
-              { value: "100%", label: "Natural" },
+              { value: "Hand",    label: "Blended" },
+              { value: "No",      label: "Synthetics" },
+              { value: "Ahmedabad", label: "Made Here" },
             ].map(({ value, label }) => (
               <div key={label} className="text-center">
                 <p className="font-serif text-lg text-gold font-light">{value}</p>
                 <p className="text-[9px] text-white/50 uppercase tracking-widest font-sans mt-0.5">{label}</p>
               </div>
             ))}
-          </div>
+          </motion.div>
 
-          {/* Prev / Next */}
-          <div className="flex items-center gap-3">
+          {/* Prev / Next nav */}
+          <motion.div
+            className="flex items-center gap-3"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.75 }}
+          >
             <button
               onClick={prev}
               aria-label="Previous slide"
-              className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:border-gold/60 hover:text-gold transition-all duration-300"
+              className={[
+                "w-10 h-10 rounded-full border border-white/20 flex items-center justify-center",
+                "text-white/60 transition-all duration-200",
+                "hover:border-gold/60 hover:text-gold hover:scale-110 hover:shadow-[0_0_14px_rgba(212,175,55,0.2)]",
+                "active:scale-95",
+              ].join(" ")}
             >
               <svg viewBox="0 0 16 16" className="w-4 h-4 fill-none stroke-current stroke-[1.5]">
                 <path d="M10 4l-4 4 4 4" strokeLinecap="round" strokeLinejoin="round" />
@@ -352,20 +460,25 @@ function HeroCarousel({ immediate = false }: { immediate?: boolean }) {
             <button
               onClick={next}
               aria-label="Next slide"
-              className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:border-gold/60 hover:text-gold transition-all duration-300"
+              className={[
+                "w-10 h-10 rounded-full border border-white/20 flex items-center justify-center",
+                "text-white/60 transition-all duration-200",
+                "hover:border-gold/60 hover:text-gold hover:scale-110 hover:shadow-[0_0_14px_rgba(212,175,55,0.2)]",
+                "active:scale-95",
+              ].join(" ")}
             >
               <svg viewBox="0 0 16 16" className="w-4 h-4 fill-none stroke-current stroke-[1.5]">
                 <path d="M6 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* ── Progress bar ── */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/10 z-20">
         <motion.div
-          className="h-full bg-gold origin-left"
+          className="h-full bg-gradient-to-r from-gold/80 to-gold origin-left"
           style={{ scaleX: progress / 100 }}
           transition={{ duration: 0 }}
         />

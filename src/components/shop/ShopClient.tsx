@@ -1,10 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Star, ShoppingBag } from "lucide-react";
+import { Star, ShoppingBag, Search } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import toast from "react-hot-toast";
 
@@ -21,12 +21,26 @@ interface Product {
   stock: number;
 }
 
+const CATEGORY_LABELS: Record<string, string> = {
+  PERFUME: "Perfume",
+  ATTAR: "Attar",
+  EAU_DE_PARFUM: "Eau de Parfum",
+  EAU_DE_TOILETTE: "Eau de Toilette",
+  BODY_MIST: "Body Mist",
+};
+
 const categories = [
   { value: "", label: "All" },
-  { value: "EAU_DE_PARFUM", label: "Eau de Parfum" },
-  { value: "EAU_DE_TOILETTE", label: "Eau de Toilette" },
+  { value: "PERFUME", label: "Perfumes" },
   { value: "ATTAR", label: "Attar" },
-  { value: "BODY_MIST", label: "Body Mist" },
+];
+
+const priceRanges = [
+  { value: "", label: "Any Price" },
+  { value: "0-500", label: "Under ₹500" },
+  { value: "500-1000", label: "₹500 – ₹1,000" },
+  { value: "1000-2000", label: "₹1,000 – ₹2,000" },
+  { value: "2000-999999", label: "₹2,000+" },
 ];
 
 const sortOptions = [
@@ -47,6 +61,23 @@ export default function ShopClient({
 }) {
   const router = useRouter();
   const { addItem } = useCartStore();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [priceRange, setPriceRange] = useState("");
+
+  const filteredProducts = useMemo(() => {
+    let result = products;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter((p) => p.title.toLowerCase().includes(q));
+    }
+    if (priceRange) {
+      const [min, max] = priceRange.split("-").map(Number);
+      result = result.filter((p) => p.price >= min && p.price <= max);
+    }
+    return result;
+  }, [products, searchQuery, priceRange]);
+
+  const categoryLabel = activeCategory ? (CATEGORY_LABELS[activeCategory] ?? activeCategory) : "Fragrance";
 
   const setFilter = (key: string, value: string) => {
     const params = new URLSearchParams(window.location.search);
@@ -57,6 +88,13 @@ export default function ShopClient({
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
+      {/* Breadcrumb */}
+      <nav className="mb-6 font-sans text-xs text-cream/40">
+        <Link href="/" className="hover:text-gold transition-colors">Home</Link>
+        <span className="mx-2">/</span>
+        <span className="text-cream/60">{activeCategory ? `${categoryLabel}s` : "Shop"}</span>
+      </nav>
+
       {/* Page Header */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -66,47 +104,72 @@ export default function ShopClient({
       >
         <p className="text-xs tracking-[0.4em] text-gold uppercase font-sans mb-2">Norelle</p>
         <h1 className="font-serif text-5xl md:text-6xl text-cream font-light">
-          The Collection
+          {activeCategory ? `${categoryLabel}s` : "The Collection"}
         </h1>
         <div className="mt-3 w-16 h-px bg-gold" />
       </motion.div>
 
       {/* Filter Bar */}
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between mb-10 sticky top-20 z-30 py-4 bg-parchment/92 backdrop-blur-xl -mx-6 px-6 border-b border-tan">
-        {/* Category pills */}
-        <div className="flex flex-wrap gap-2">
-          {categories.map((cat) => (
-            <button
-              key={cat.value}
-              onClick={() => setFilter("category", cat.value)}
-              className={`px-4 py-2 rounded-full text-xs tracking-widest uppercase font-sans transition-all duration-300 ${
-                activeCategory === cat.value
-                  ? "bg-gold text-noir font-semibold shadow-gold-glow"
-                  : "border border-tan text-mocha hover:border-gold/40 hover:text-cream bg-white"
-              }`}
+      <div className="flex flex-col gap-4 mb-10 sticky top-20 z-30 py-4 bg-parchment/92 backdrop-blur-xl -mx-6 px-6 border-b border-tan">
+        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+          {/* Category pills */}
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <button
+                key={cat.value}
+                onClick={() => setFilter("category", cat.value)}
+                className={`px-4 py-2 rounded-full text-xs tracking-widest uppercase font-sans transition-all duration-300 ${
+                  activeCategory === cat.value
+                    ? "bg-gold text-noir font-semibold shadow-gold-glow"
+                    : "border border-tan text-mocha hover:border-gold/40 hover:text-cream bg-white"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Sort + count */}
+          <div className="flex items-center gap-4">
+            <span className="text-xs text-latte font-sans">{filteredProducts.length} {filteredProducts.length === 1 ? "result" : "results"}</span>
+            <select
+              value={activeSort}
+              onChange={(e) => setFilter("sort", e.target.value)}
+              className="bg-white border border-tan text-mocha text-xs font-sans rounded-lg px-4 py-2 focus:outline-none focus:border-gold/50 cursor-pointer"
             >
-              {cat.label}
-            </button>
-          ))}
+              {sortOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        {/* Sort + count */}
-        <div className="flex items-center gap-4">
-          <span className="text-xs text-latte font-sans">{products.length} results</span>
+        {/* Search + Price filter */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-latte" />
+            <input
+              type="text"
+              placeholder="Search fragrances..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white border border-tan text-cream font-sans text-xs placeholder:text-latte focus:outline-none focus:border-gold/50 transition-colors"
+            />
+          </div>
           <select
-            value={activeSort}
-            onChange={(e) => setFilter("sort", e.target.value)}
-            className="bg-white border border-tan text-mocha text-xs font-sans rounded-lg px-4 py-2 focus:outline-none focus:border-gold/50 cursor-pointer"
+            value={priceRange}
+            onChange={(e) => setPriceRange(e.target.value)}
+            className="bg-white border border-tan text-mocha text-xs font-sans rounded-xl px-4 py-2.5 focus:outline-none focus:border-gold/50 cursor-pointer"
           >
-            {sortOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            {priceRanges.map((r) => (
+              <option key={r.value} value={r.value}>{r.label}</option>
             ))}
           </select>
         </div>
       </div>
 
       {/* Product Grid */}
-      {products.length === 0 ? (
+      {filteredProducts.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-32 gap-4 text-center">
           <ShoppingBag className="w-20 h-20 text-tan" />
           <h2 className="font-serif text-2xl text-latte">No fragrances found</h2>
@@ -121,7 +184,7 @@ export default function ShopClient({
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
           <AnimatePresence>
-            {products.map((product, index) => (
+            {filteredProducts.map((product, index) => (
               <motion.div
                 key={product._id}
                 layout
@@ -137,7 +200,7 @@ export default function ShopClient({
                       {product.images[0] ? (
                         <Image
                           src={product.images[0]}
-                          alt={product.title}
+                          alt={`${product.title} - ${CATEGORY_LABELS[product.category] ?? product.category} by Norelle | Buy Online Ahmedabad`}
                           fill
                           className="object-cover transition-transform duration-700 group-hover:scale-110"
                           sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,25vw"

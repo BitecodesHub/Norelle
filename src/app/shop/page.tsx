@@ -4,15 +4,34 @@ import Footer from "@/components/layout/Footer";
 import ShopClient from "@/components/shop/ShopClient";
 import connectDB from "@/lib/mongoose";
 import Product from "@/models/Product";
+import { collectionPageSchema, breadcrumbSchema } from "@/lib/schemas";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 600; // ISR: revalidate every 10 minutes
 
 export const metadata: Metadata = {
-  title: "Shop All Fragrances",
+  title: "Buy Luxury Perfumes & Attar Online | Norelle Ahmedabad",
   description:
-    "Browse Norelle's complete collection of luxury perfumes, attars, and fragrances. Filter by category, price, and more. Free delivery in Ahmedabad.",
-  keywords: ["luxury perfume shop", "buy perfume online India", "best attar shop Ahmedabad"],
+    "Browse Norelle's complete collection of luxury perfumes and natural attars. Handcrafted, 100% natural fragrances with free delivery in Ahmedabad. Shop online now.",
+  keywords: [
+    "buy perfume online Ahmedabad",
+    "luxury perfume shop",
+    "best attar shop Ahmedabad",
+    "natural fragrance India",
+    "Norelle perfume collection",
+  ],
+  alternates: { canonical: "https://norelle.in/shop" },
 };
+
+const shopCollection = collectionPageSchema(
+  "Norelle Fragrance Collection",
+  "Browse Norelle's complete collection of luxury perfumes and natural attars. Free delivery in Ahmedabad.",
+  "https://norelle.in/shop"
+);
+
+const shopBreadcrumbs = breadcrumbSchema([
+  { name: "Home", url: "https://norelle.in" },
+  { name: "Shop", url: "https://norelle.in/shop" },
+]);
 
 async function getAllProducts(searchParams: { category?: string; sort?: string }) {
   try {
@@ -47,6 +66,8 @@ export default async function ShopPage({
   const products = await getAllProducts(params);
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(shopCollection) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(shopBreadcrumbs) }} />
       <Navbar />
       <main className="pt-24 min-h-screen">
         <ShopClient products={products} activeCategory={params.category ?? ""} activeSort={params.sort ?? "newest"} />

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, ShoppingBag, ChevronRight, Minus, Plus, Wind, Heart, Layers } from "lucide-react";
+import { Star, ShoppingBag, ChevronRight, Minus, Plus, Wind, Heart, Layers, Share2, Copy, Check, Shield, Truck, CreditCard } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import toast from "react-hot-toast";
 
@@ -32,9 +32,10 @@ interface Product {
 }
 
 const categoryLabel: Record<string, string> = {
+  PERFUME: "Perfume",
+  ATTAR: "Attar",
   EAU_DE_PARFUM: "Eau de Parfum",
   EAU_DE_TOILETTE: "Eau de Toilette",
-  ATTAR: "Attar",
   BODY_MIST: "Body Mist",
 };
 
@@ -42,6 +43,7 @@ export default function ProductDetail({ product, reviews }: { product: Product; 
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<"notes" | "ingredients" | "reviews">("notes");
+  const [copied, setCopied] = useState(false);
   const { addItem } = useCartStore();
 
   const handleAddToCart = () => {
@@ -73,14 +75,14 @@ export default function ProductDetail({ product, reviews }: { product: Product; 
             initial={{ opacity: 0.8, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4 }}
-            className="relative aspect-square rounded-2xl overflow-hidden bg-charcoal border border-tan"
+            className="relative aspect-square rounded-2xl overflow-hidden bg-charcoal border border-tan group/img cursor-zoom-in"
           >
             {product.images[selectedImage] ? (
               <Image
                 src={product.images[selectedImage]}
-                alt={product.title}
+                alt={`${product.title} - ${categoryLabel[product.category] ?? product.category} by Norelle | Buy Online Ahmedabad`}
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-500 group-hover/img:scale-125"
                 priority
               />
             ) : (
@@ -173,10 +175,49 @@ export default function ProductDetail({ product, reviews }: { product: Product; 
           </motion.button>
 
           {product.longevity && (
-            <p className="text-xs text-latte font-sans text-center">
+            <p className="text-xs text-latte font-sans text-center mb-6">
               🕐 Longevity: {product.longevity}
             </p>
           )}
+
+          {/* Trust Badges */}
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            {[
+              { icon: Shield, label: "Genuine Product" },
+              { icon: Truck, label: "Free Delivery Ahmedabad" },
+              { icon: CreditCard, label: "Secure Payment" },
+            ].map(({ icon: Icon, label }) => (
+              <div key={label} className="flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl bg-charcoal border border-tan text-center">
+                <Icon className="w-4 h-4 text-gold/60" />
+                <span className="text-[10px] text-cream/40 font-sans leading-tight">{label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Share Buttons */}
+          <div className="flex items-center gap-3 justify-center">
+            <span className="text-xs text-latte font-sans flex items-center gap-1">
+              <Share2 className="w-3 h-3" /> Share:
+            </span>
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(`Check out ${product.title} by Norelle! https://norelle.in/shop/${product.slug}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 rounded-lg border border-tan text-xs font-sans text-mocha hover:border-[#25D366] hover:text-[#25D366] transition-colors"
+            >
+              WhatsApp
+            </a>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(`https://norelle.in/shop/${product.slug}`);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              }}
+              className="px-3 py-1.5 rounded-lg border border-tan text-xs font-sans text-mocha hover:border-gold/50 hover:text-gold transition-colors flex items-center gap-1"
+            >
+              {copied ? <><Check className="w-3 h-3" /> Copied</> : <><Copy className="w-3 h-3" /> Copy Link</>}
+            </button>
+          </div>
         </div>
       </div>
 

@@ -3,16 +3,19 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/home/HeroSection";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
-import BrandStory from "@/components/home/BrandStory";
+import CategoryShowcase from "@/components/home/CategoryShowcase";
+import WhyChooseUs from "@/components/home/WhyChooseUs";
+import ProcessPreview from "@/components/home/ProcessPreview";
+
 import connectDB from "@/lib/mongoose";
 import Product from "@/models/Product";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: revalidate every hour
 
 export const metadata: Metadata = {
-  title: "Norelle — Luxury Perfumes | Scent of Presence",
+  title: "Norelle — Luxury Perfumes & Attar in Ahmedabad | Scent of Presence",
   description:
-    "Discover Norelle — premium luxury perfumes and attars crafted for those who define their presence. Shop online, free delivery in Ahmedabad.",
+    "Discover Norelle — premium luxury perfumes and natural attars handcrafted in Ahmedabad. 100% natural, free delivery across the city. Shop online or visit us at Shahpur.",
 };
 
 async function getFeaturedProducts() {
@@ -37,7 +40,9 @@ export default async function HomePage() {
       <main>
         <HeroSection />
         <FeaturedProducts products={featured} />
-        <BrandStory />
+        <CategoryShowcase />
+        <WhyChooseUs />
+        <ProcessPreview />
       </main>
       <Footer />
     </>

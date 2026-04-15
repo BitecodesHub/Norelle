@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession, signOut } from "next-auth/react";
 import { ShoppingBag, User, Menu, X, ChevronDown } from "lucide-react";
@@ -8,16 +9,22 @@ import { useCartStore } from "@/store/cartStore";
 import CartDrawer from "@/components/cart/CartDrawer";
 
 const navLinks = [
-  { label: "Shop", href: "/shop" },
-  { label: "Collections", href: "/shop?category=featured" },
-  { label: "Attar", href: "/shop?category=ATTAR" },
+  { label: "Shop", href: "/shop", dropdown: [
+    { label: "All Fragrances", href: "/shop" },
+    { label: "Perfumes", href: "/shop?category=PERFUME" },
+    { label: "Attar", href: "/shop?category=ATTAR" },
+  ]},
   { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const transparent = isHome && !scrolled;
   const { data: session } = useSession();
   const { getItemCount, openCart } = useCartStore();
   const itemCount = getItemCount();
@@ -35,7 +42,7 @@ export default function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
+          !transparent
             ? "bg-parchment/90 backdrop-blur-xl border-b border-tan shadow-card"
             : "bg-transparent"
         }`}
@@ -45,7 +52,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center">
             <span
               data-navbar-logo
-              className="font-serif text-2xl tracking-[0.35em] text-cream font-light"
+              className={`font-serif text-2xl tracking-[0.35em] font-light transition-colors duration-500 ${!transparent ? "text-cream" : "text-white"}`}
             >
               NORELLE
             </span>
@@ -54,14 +61,33 @@ export default function Navbar() {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-10">
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="relative text-sm tracking-widest text-mocha uppercase font-sans hover:text-cream transition-colors duration-300 group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-gold transition-all duration-300 group-hover:w-full" />
-              </Link>
+              <div key={link.href} className="relative group">
+                <Link
+                  href={link.href}
+                  className={`relative text-sm tracking-widest uppercase font-sans transition-colors duration-300 flex items-center gap-1 ${!transparent ? "text-mocha hover:text-cream" : "text-white hover:text-gold"}`}
+                >
+                  {link.label}
+                  {"dropdown" in link && link.dropdown && (
+                    <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
+                  )}
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gold transition-all duration-300 group-hover:w-full" />
+                </Link>
+                {"dropdown" in link && link.dropdown && (
+                  <div className="absolute top-full left-0 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <div className="w-48 bg-white border border-tan rounded-xl shadow-card-hover overflow-hidden">
+                      {link.dropdown.map((sub) => (
+                        <Link
+                          key={sub.href}
+                          href={sub.href}
+                          className="block px-4 py-3 text-sm text-mocha hover:text-cream hover:bg-charcoal transition-colors font-sans"
+                        >
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
           </nav>
 
@@ -71,7 +97,7 @@ export default function Navbar() {
             <div className="relative hidden md:block">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-1.5 text-mocha hover:text-cream transition-colors duration-300"
+                className={`flex items-center gap-1.5 transition-colors duration-300 ${!transparent ? "text-mocha hover:text-cream" : "text-white hover:text-gold"}`}
               >
                 <User className="w-5 h-5" />
                 {session?.user && (
@@ -158,7 +184,7 @@ export default function Navbar() {
             {/* Cart button */}
             <button
               onClick={openCart}
-              className="relative text-mocha hover:text-cream transition-colors duration-300"
+              className={`relative transition-colors duration-300 ${!transparent ? "text-mocha hover:text-cream" : "text-white hover:text-gold"}`}
               aria-label="Open cart"
             >
               <ShoppingBag className="w-5 h-5" />
@@ -176,7 +202,7 @@ export default function Navbar() {
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden text-mocha hover:text-cream transition-colors"
+              className={`md:hidden transition-colors duration-300 ${!transparent ? "text-mocha hover:text-cream" : "text-white hover:text-gold"}`}
               aria-label="Toggle menu"
             >
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -194,16 +220,31 @@ export default function Navbar() {
               transition={{ duration: 0.35, ease: "easeInOut" }}
               className="md:hidden overflow-hidden bg-parchment/98 backdrop-blur-xl border-t border-tan"
             >
-              <div className="px-6 py-6 flex flex-col gap-6">
+              <div className="px-6 py-6 flex flex-col gap-5">
                 {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="text-lg font-serif tracking-wider text-mocha hover:text-gold transition-colors"
-                  >
-                    {link.label}
-                  </Link>
+                  <div key={link.href}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="text-lg font-serif tracking-wider text-mocha hover:text-gold transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                    {"dropdown" in link && link.dropdown && (
+                      <div className="ml-4 mt-2 flex flex-col gap-2">
+                        {link.dropdown.map((sub) => (
+                          <Link
+                            key={sub.href}
+                            href={sub.href}
+                            onClick={() => setMobileOpen(false)}
+                            className="text-sm font-sans text-cream/40 hover:text-gold transition-colors"
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ))}
                 <div className="border-t border-tan pt-4 flex flex-col gap-3">
                   {session?.user ? (
