@@ -91,7 +91,7 @@ export default async function Image() {
             letterSpacing: "0.15em",
           }}
         >
-          <span>norelle.in</span>
+          <span>norelleperfumes.com</span>
           <span>·</span>
           <span>100% Natural</span>
           <span>·</span>

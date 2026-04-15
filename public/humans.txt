@@ -1,0 +1,14 @@
+/* TEAM */
+Company: Norelle
+Site: https://www.norelleperfumes.com
+Location: Ahmedabad, Gujarat, India
+
+/* THANKS */
+Built with Next.js, Tailwind CSS, and MongoDB.
+
+/* SITE */
+Last update: 2026/04
+Language: English
+Doctype: HTML5
+IDE: VSCode
+Standards: HTML5, CSS3, WAI-ARIA

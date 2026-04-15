@@ -4,25 +4,50 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
+        // All crawlers: allow all public pages
         userAgent: "*",
         allow: [
           "/",
           "/shop",
-          "/perfume-shop-ahmedabad",
-          "/best-attar-ahmedabad",
+          "/shop/",
           "/about",
           "/contact",
           "/privacy",
           "/terms",
+          "/perfume-shop-ahmedabad",
+          "/best-attar-ahmedabad",
+          "/perfume-shop-sg-highway",
+          "/perfume-shop-satellite",
+          "/perfume-shop-bopal",
+          "/perfume-shop-cg-road",
+          "/perfume-shop-maninagar",
+          "/perfume-shop-navrangpura",
         ],
-        disallow: ["/admin", "/salesman", "/api", "/account", "/checkout"],
+        disallow: [
+          "/api/",
+          "/admin/",
+          "/salesman/",
+          "/account/",
+          "/checkout/",
+          "/order-success/",
+          "/login/",
+          "/register/",
+          "/_next/",
+          "/static/",
+          "/*?*",          // Block all query-string URLs (use clean canonical URLs only)
+        ],
       },
       {
+        // Allow Google Images to crawl product images
         userAgent: "Googlebot-Image",
-        allow: "/",
+        allow: ["/", "/shop/"],
+      },
+      {
+        // Block AI training crawlers
+        userAgent: ["GPTBot", "ChatGPT-User", "CCBot", "anthropic-ai", "Claude-Web", "Omgilibot"],
+        disallow: "/",
       },
     ],
-    sitemap: "https://norelle.in/sitemap.xml",
-    host: "https://norelle.in",
+    sitemap: "https://www.norelleperfumes.com/sitemap.xml",
   };
 }

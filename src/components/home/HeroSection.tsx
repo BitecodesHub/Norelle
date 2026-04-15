@@ -159,7 +159,7 @@ export default function HeroSection() {
   if (skipIntro) return <HeroCarousel immediate />;
 
   return (
-    <section className="relative w-full min-h-screen overflow-hidden bg-noir">
+    <section className="relative w-full min-h-[100svh] overflow-hidden bg-noir">
       {(phase === "intro" || phase === "letters" || phase === "hold") && (
         <div className="absolute inset-0 bg-noir z-0" />
       )}
@@ -280,7 +280,7 @@ function HeroCarousel({ immediate = false }: { immediate?: boolean }) {
   const slide = SLIDES[current];
 
   return (
-    <div ref={containerRef} className="relative w-full min-h-screen overflow-hidden">
+    <div ref={containerRef} className="relative w-full min-h-[100svh] overflow-hidden">
 
       {/* ── Background layer (cursor + scroll parallax) ── */}
       <AnimatePresence mode="sync">
@@ -311,26 +311,30 @@ function HeroCarousel({ immediate = false }: { immediate?: boolean }) {
               src={slide.image}
               alt={slide.italic}
               fill
-              className="object-cover object-center"
-              sizes="100vw"
+              className="object-cover object-[center_15%] md:object-[center_10%]"
+              sizes="(max-width: 768px) 100vw, 100vw"
               priority={slide.id === 1}
+              quality={90}
             />
           </motion.div>
 
-          {/* Side gradient overlay */}
-          <div className={`absolute inset-0 ${slide.gradient}`} />
+          {/* Mobile: strong full overlay so text is always legible */}
+          <div className="absolute inset-0 bg-noir/55 md:bg-transparent" />
 
-          {/* Subtle vignette for depth */}
+          {/* Desktop: side gradient overlay */}
+          <div className={`absolute inset-0 hidden md:block ${slide.gradient}`} />
+
+          {/* Vignette for depth */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(14,14,14,0.45)_100%)]" />
 
           {/* Bottom fade */}
-          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-noir/65 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-noir/70 to-transparent" />
         </motion.div>
       </AnimatePresence>
 
       {/* ── Foreground text (subtle inverse cursor drift) ── */}
       <motion.div
-        className="relative z-10 min-h-screen flex flex-col justify-between pt-24"
+        className="relative z-10 min-h-[100svh] flex flex-col justify-between pt-24"
         style={{ x: contentX, y: contentY }}
       >
         <div className="flex-1 flex items-center">
@@ -475,14 +479,6 @@ function HeroCarousel({ immediate = false }: { immediate?: boolean }) {
         </div>
       </motion.div>
 
-      {/* ── Progress bar ── */}
-      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/10 z-20">
-        <motion.div
-          className="h-full bg-gradient-to-r from-gold/80 to-gold origin-left"
-          style={{ scaleX: progress / 100 }}
-          transition={{ duration: 0 }}
-        />
-      </div>
     </div>
   );
 }
