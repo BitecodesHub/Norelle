@@ -7,7 +7,7 @@ const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 40 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "-60px" },
-  transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1], delay },
+  transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] as [number, number, number, number], delay },
 });
 
 const fadeIn = (delay = 0) => ({

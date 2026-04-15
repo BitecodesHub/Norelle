@@ -39,13 +39,13 @@ async function getAllProducts(searchParams: { category?: string; sort?: string }
     const query: Record<string, unknown> = {};
     if (searchParams.category) query.category = searchParams.category;
 
-    const sortMap: Record<string, Record<string, number>> = {
-      newest: { createdAt: -1 },
-      "price-asc": { price: 1 },
-      "price-desc": { price: -1 },
-      popular: { reviewCount: -1 },
+    const sortMap: Record<string, [string, 1 | -1][]> = {
+      newest: [["createdAt", -1]],
+      "price-asc": [["price", 1]],
+      "price-desc": [["price", -1]],
+      popular: [["reviewCount", -1]],
     };
-    const sort = sortMap[searchParams.sort ?? "newest"] ?? { createdAt: -1 };
+    const sort = sortMap[searchParams.sort ?? "newest"] ?? [["createdAt", -1]];
 
     const products = await Product.find(query)
       .select("title slug price comparePrice images category rating reviewCount stock")
