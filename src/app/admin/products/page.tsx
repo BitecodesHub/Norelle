@@ -19,7 +19,7 @@ export default async function AdminProductsPage() {
   const data = JSON.parse(JSON.stringify(products));
 
   return (
-    <div className="min-h-screen bg-noir max-w-7xl mx-auto px-6 py-10">
+    <div className="min-h-screen bg-parchment max-w-7xl mx-auto px-6 py-10">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
           <Link href="/admin" className="text-cream/50 hover:text-cream transition-colors"><ArrowLeft className="w-5 h-5" /></Link>

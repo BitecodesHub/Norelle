@@ -23,7 +23,7 @@ const steps = [
 
 export default function ProcessPreview() {
   return (
-    <section className="py-16 bg-parchment">
+    <section className="py-16 bg-white">
       <div className="max-w-5xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

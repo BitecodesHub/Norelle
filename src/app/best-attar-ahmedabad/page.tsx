@@ -19,18 +19,18 @@ export const metadata: Metadata = {
     "sandalwood attar",
     "pure attar Shahpur",
   ],
-  alternates: { canonical: "https://norelle.in/best-attar-ahmedabad" },
+  alternates: { canonical: "https://www.norelleperfumes.com/best-attar-ahmedabad" },
 };
 
 const breadcrumbs = breadcrumbSchema([
-  { name: "Home", url: "https://norelle.in" },
-  { name: "Attar Collection", url: "https://norelle.in/best-attar-ahmedabad" },
+  { name: "Home", url: "https://www.norelleperfumes.com" },
+  { name: "Attar Collection", url: "https://www.norelleperfumes.com/best-attar-ahmedabad" },
 ]);
 
 const collection = collectionPageSchema(
   "Best Attar in Ahmedabad",
   "Curated collection of pure, natural, alcohol-free attars from Norelle — sourced from the finest botanical ingredients worldwide.",
-  "https://norelle.in/best-attar-ahmedabad"
+  "https://www.norelleperfumes.com/best-attar-ahmedabad"
 );
 
 const attarFaqs = faqSchema([

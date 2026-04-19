@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     formats: ["image/avif", "image/webp"],
+    qualities: [75, 90],
   },
 
   // Redirect non-www → www for canonical consistency

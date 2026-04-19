@@ -3,14 +3,12 @@ import { MetadataRoute } from "next";
 export const dynamic = "force-dynamic";
 
 const BASE = "https://www.norelleperfumes.com";
+const HERO_IMAGE = `${BASE}/images/Norelle%20Handblended%20Perfumes.png`;
 
-// Static pages with realistic last-modified dates
 const staticRoutes: MetadataRoute.Sitemap = [
-  // Tier 1 — Homepage
-  { url: BASE, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
+  { url: BASE, lastModified: new Date(), changeFrequency: "daily", priority: 1.0, images: [HERO_IMAGE] },
 
-  // Tier 2 — Shop & product collections
-  { url: `${BASE}/shop`, lastModified: new Date(), changeFrequency: "daily", priority: 0.95 },
+  { url: `${BASE}/shop`, lastModified: new Date(), changeFrequency: "daily", priority: 0.95, images: [HERO_IMAGE] },
 
   // Tier 3 — High-value local SEO landing pages
   { url: `${BASE}/perfume-shop-ahmedabad`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.92 },
@@ -42,14 +40,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     await connectDB();
 
     const products = await Product.find({ stock: { $gt: 0 } })
-      .select("slug updatedAt")
-      .lean() as { slug: string; updatedAt: Date }[];
+      .select("slug updatedAt images")
+      .lean() as { slug: string; updatedAt: Date; images?: string[] }[];
 
     productUrls = products.map((p) => ({
       url: `${BASE}/shop/${p.slug}`,
       lastModified: p.updatedAt ?? new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.85,
+      images: p.images?.length ? p.images.slice(0, 5) : undefined,
     }));
   } catch {
     // DB not available at build time — products will be missing from sitemap

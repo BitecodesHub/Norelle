@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Providers from "@/components/Providers";
@@ -8,18 +7,6 @@ import WhatsAppButton from "@/components/shared/WhatsAppButton";
 
 const BASE = "https://www.norelleperfumes.com";
 
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-cormorant",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
 
 export const viewport: Viewport = {
   themeColor: "#D4AF37",
@@ -68,11 +55,11 @@ export const metadata: Metadata = {
       "Premium handcrafted perfumes and natural attars. Free delivery in Ahmedabad. Shop online or visit us at Shahpur.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/images/Norelle Handblended Perfumes.jpg",
         width: 1200,
         height: 630,
         alt: "Norelle — Luxury Perfumes & Attar, Ahmedabad",
-        type: "image/jpeg",
+        type: "image/png",
       },
     ],
   },
@@ -82,7 +69,7 @@ export const metadata: Metadata = {
     title: "Norelle — Luxury Perfumes & Attar | Ahmedabad",
     description:
       "Premium handcrafted perfumes and natural attars. Free delivery in Ahmedabad.",
-    images: ["/og-image.jpg"],
+    images: ["/images/Norelle Handblended Perfumes.jpg"],
     creator: "@norelleperfumes",
   },
 
@@ -112,12 +99,11 @@ export const metadata: Metadata = {
 
   icons: {
     icon: [
+      { url: "/images/Logo.png", sizes: "any", type: "image/png" },
       { url: "/favicon.ico", sizes: "48x48" },
-      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-    shortcut: "/favicon.ico",
+    apple: [{ url: "/images/Logo.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/images/Logo.png",
   },
 
   other: {
@@ -130,7 +116,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className={`${cormorant.variable} ${inter.variable}`}>
+    <html lang="en-IN">
       <head>
         <script
           type="application/ld+json"
@@ -157,7 +143,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 color: "#1C1008",
                 border: "1px solid #E2D0BC",
                 borderRadius: "10px",
-                fontFamily: "Inter, sans-serif",
+                fontFamily: "Calibri, 'Gill Sans', sans-serif",
                 fontSize: "14px",
                 boxShadow: "0 4px 20px rgba(140,90,40,0.1)",
               },

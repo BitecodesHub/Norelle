@@ -3,6 +3,19 @@ import { auth } from "@/lib/auth";
 import connectDB from "@/lib/mongoose";
 import Product from "@/models/Product";
 
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const session = await auth();
+  if (!session?.user || (session.user as { role?: string }).role !== "ADMIN") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const { id } = await params;
+  await connectDB();
+  const product = await Product.findById(id).lean();
+  if (!product) return NextResponse.json({ error: "Product not found" }, { status: 404 });
+  return NextResponse.json(product);
+}
+
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
   if (!session?.user || (session.user as { role?: string }).role !== "ADMIN") {

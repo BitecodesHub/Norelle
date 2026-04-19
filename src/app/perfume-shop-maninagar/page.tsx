@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "buy perfume Maninagar",
     "best perfume shop East Ahmedabad",
   ],
-  alternates: { canonical: "https://norelle.in/perfume-shop-maninagar" },
+  alternates: { canonical: "https://www.norelleperfumes.com/perfume-shop-maninagar" },
 };
 
 const schema = localBusinessSchema({
@@ -24,9 +24,9 @@ const schema = localBusinessSchema({
 });
 
 const breadcrumbs = breadcrumbSchema([
-  { name: "Home", url: "https://norelle.in" },
-  { name: "Perfume Shop Ahmedabad", url: "https://norelle.in/perfume-shop-ahmedabad" },
-  { name: "Maninagar", url: "https://norelle.in/perfume-shop-maninagar" },
+  { name: "Home", url: "https://www.norelleperfumes.com" },
+  { name: "Perfume Shop Ahmedabad", url: "https://www.norelleperfumes.com/perfume-shop-ahmedabad" },
+  { name: "Maninagar", url: "https://www.norelleperfumes.com/perfume-shop-maninagar" },
 ]);
 
 export default function Page() {

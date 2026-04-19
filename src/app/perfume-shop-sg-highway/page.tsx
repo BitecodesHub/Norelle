@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "buy perfume SG Highway",
     "best perfume shop near Iscon Mall",
   ],
-  alternates: { canonical: "https://norelle.in/perfume-shop-sg-highway" },
+  alternates: { canonical: "https://www.norelleperfumes.com/perfume-shop-sg-highway" },
 };
 
 const schema = localBusinessSchema({
@@ -24,9 +24,9 @@ const schema = localBusinessSchema({
 });
 
 const breadcrumbs = breadcrumbSchema([
-  { name: "Home", url: "https://norelle.in" },
-  { name: "Perfume Shop Ahmedabad", url: "https://norelle.in/perfume-shop-ahmedabad" },
-  { name: "SG Highway", url: "https://norelle.in/perfume-shop-sg-highway" },
+  { name: "Home", url: "https://www.norelleperfumes.com" },
+  { name: "Perfume Shop Ahmedabad", url: "https://www.norelleperfumes.com/perfume-shop-ahmedabad" },
+  { name: "SG Highway", url: "https://www.norelleperfumes.com/perfume-shop-sg-highway" },
 ]);
 
 export default function Page() {

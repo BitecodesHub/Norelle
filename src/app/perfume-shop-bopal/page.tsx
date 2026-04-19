@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "buy perfume Bopal online",
     "best perfume shop South Ahmedabad",
   ],
-  alternates: { canonical: "https://norelle.in/perfume-shop-bopal" },
+  alternates: { canonical: "https://www.norelleperfumes.com/perfume-shop-bopal" },
 };
 
 const schema = localBusinessSchema({
@@ -24,9 +24,9 @@ const schema = localBusinessSchema({
 });
 
 const breadcrumbs = breadcrumbSchema([
-  { name: "Home", url: "https://norelle.in" },
-  { name: "Perfume Shop Ahmedabad", url: "https://norelle.in/perfume-shop-ahmedabad" },
-  { name: "Bopal", url: "https://norelle.in/perfume-shop-bopal" },
+  { name: "Home", url: "https://www.norelleperfumes.com" },
+  { name: "Perfume Shop Ahmedabad", url: "https://www.norelleperfumes.com/perfume-shop-ahmedabad" },
+  { name: "Bopal", url: "https://www.norelleperfumes.com/perfume-shop-bopal" },
 ]);
 
 export default function Page() {

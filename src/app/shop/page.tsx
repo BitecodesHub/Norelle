@@ -11,26 +11,38 @@ export const revalidate = 600; // ISR: revalidate every 10 minutes
 export const metadata: Metadata = {
   title: "Buy Luxury Perfumes & Attar Online | Norelle Ahmedabad",
   description:
-    "Browse Norelle's complete collection of luxury perfumes and natural attars. Handcrafted, 100% natural fragrances with free delivery in Ahmedabad. Shop online now.",
+    "Shop Norelle's full collection of luxury perfumes and natural attars — oud, rose, sandalwood, musk, and handblended Eau de Parfums. 100% natural, free delivery across Ahmedabad. Browse, compare, and buy online.",
   keywords: [
     "buy perfume online Ahmedabad",
-    "luxury perfume shop",
+    "buy attar online India",
+    "luxury perfume shop online",
     "best attar shop Ahmedabad",
     "natural fragrance India",
     "Norelle perfume collection",
+    "oud attar online",
+    "rose attar price India",
+    "sandalwood attar online",
+    "alcohol free perfume India",
   ],
-  alternates: { canonical: "https://norelle.in/shop" },
+  alternates: { canonical: "https://www.norelleperfumes.com/shop" },
+  openGraph: {
+    type: "website",
+    url: "https://www.norelleperfumes.com/shop",
+    title: "Shop Norelle Luxury Perfumes & Attar",
+    description:
+      "Handcrafted luxury perfumes and 100% natural attars. Oud, rose, sandalwood, musk, and more. Free delivery across Ahmedabad.",
+  },
 };
 
 const shopCollection = collectionPageSchema(
   "Norelle Fragrance Collection",
   "Browse Norelle's complete collection of luxury perfumes and natural attars. Free delivery in Ahmedabad.",
-  "https://norelle.in/shop"
+  "https://www.norelleperfumes.com/shop"
 );
 
 const shopBreadcrumbs = breadcrumbSchema([
-  { name: "Home", url: "https://norelle.in" },
-  { name: "Shop", url: "https://norelle.in/shop" },
+  { name: "Home", url: "https://www.norelleperfumes.com" },
+  { name: "Shop", url: "https://www.norelleperfumes.com/shop" },
 ]);
 
 async function getAllProducts(searchParams: { category?: string; sort?: string }) {
@@ -48,7 +60,7 @@ async function getAllProducts(searchParams: { category?: string; sort?: string }
     const sort = sortMap[searchParams.sort ?? "newest"] ?? [["createdAt", -1]];
 
     const products = await Product.find(query)
-      .select("title slug price comparePrice images category rating reviewCount stock")
+      .select("title slug price comparePrice images category rating reviewCount stock variants")
       .sort(sort)
       .lean();
     return JSON.parse(JSON.stringify(products));

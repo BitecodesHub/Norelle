@@ -13,7 +13,7 @@ const SLIDE_DURATION = 5500;
 const SLIDES = [
   {
     id: 1,
-    image: "/Hero/Norelle Female model .png",
+    image: "/Hero/Norelle Female Model.jpg",
     tag: "Handcrafted · Ahmedabad",
     title: "A scent that",
     italic: "stays with you",
@@ -25,7 +25,7 @@ const SLIDES = [
   },
   {
     id: 2,
-    image: "/Hero/Norelle Male Model.png",
+    image: "/Hero/Norelle Male Model.jpg",
     tag: "Pure Attar · Copper-Distilled",
     title: "The same way,",
     italic: "for 400 years",
@@ -314,7 +314,8 @@ function HeroCarousel({ immediate = false }: { immediate?: boolean }) {
               className="object-cover object-[center_15%] md:object-[center_10%]"
               sizes="(max-width: 768px) 100vw, 100vw"
               priority={slide.id === 1}
-              quality={90}
+              fetchPriority={slide.id === 1 ? "high" : "auto"}
+              quality={75}
             />
           </motion.div>
 

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "best perfume store near Judges Bungalow",
     "fragrance shop Satellite area",
   ],
-  alternates: { canonical: "https://norelle.in/perfume-shop-satellite" },
+  alternates: { canonical: "https://www.norelleperfumes.com/perfume-shop-satellite" },
 };
 
 const schema = localBusinessSchema({
@@ -24,9 +24,9 @@ const schema = localBusinessSchema({
 });
 
 const breadcrumbs = breadcrumbSchema([
-  { name: "Home", url: "https://norelle.in" },
-  { name: "Perfume Shop Ahmedabad", url: "https://norelle.in/perfume-shop-ahmedabad" },
-  { name: "Satellite", url: "https://norelle.in/perfume-shop-satellite" },
+  { name: "Home", url: "https://www.norelleperfumes.com" },
+  { name: "Perfume Shop Ahmedabad", url: "https://www.norelleperfumes.com/perfume-shop-ahmedabad" },
+  { name: "Satellite", url: "https://www.norelleperfumes.com/perfume-shop-satellite" },
 ]);
 
 export default function Page() {

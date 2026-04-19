@@ -9,6 +9,7 @@ export interface CartItem {
   image: string;
   price: number;
   quantity: number;
+  size?: string;
 }
 
 interface CouponState {
@@ -47,14 +48,19 @@ export const useCartStore = create<CartStore>()(
       isOpen: false,
 
       addItem: (item) => {
-        const existing = get().items.find((i) => i.id === item.id);
+        const cartKey = item.size ? `${item.id}__${item.size}` : item.id;
+        const existing = get().items.find((i) => {
+          const k = i.size ? `${i.id}__${i.size}` : i.id;
+          return k === cartKey;
+        });
         if (existing) {
           set((s) => ({
-            items: s.items.map((i) =>
-              i.id === item.id
+            items: s.items.map((i) => {
+              const k = i.size ? `${i.id}__${i.size}` : i.id;
+              return k === cartKey
                 ? { ...i, quantity: i.quantity + (item.quantity ?? 1) }
-                : i
-            ),
+                : i;
+            }),
           }));
         } else {
           set((s) => ({
@@ -65,7 +71,10 @@ export const useCartStore = create<CartStore>()(
       },
 
       removeItem: (id) =>
-        set((s) => ({ items: s.items.filter((i) => i.id !== id) })),
+        set((s) => ({ items: s.items.filter((i) => {
+          const k = i.size ? `${i.id}__${i.size}` : i.id;
+          return k !== id;
+        }) })),
 
       updateQuantity: (id, quantity) => {
         if (quantity < 1) {
@@ -73,7 +82,10 @@ export const useCartStore = create<CartStore>()(
           return;
         }
         set((s) => ({
-          items: s.items.map((i) => (i.id === id ? { ...i, quantity } : i)),
+          items: s.items.map((i) => {
+            const k = i.size ? `${i.id}__${i.size}` : i.id;
+            return k === id ? { ...i, quantity } : i;
+          }),
         }));
       },
 

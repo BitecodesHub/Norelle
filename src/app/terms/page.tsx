@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 export const metadata: Metadata = {
   title: "Terms & Conditions",
   description: "Terms and conditions for shopping at Norelle — luxury perfumes and attars in Ahmedabad. Shipping, returns, and policies.",
-  alternates: { canonical: "https://norelle.in/terms" },
+  alternates: { canonical: "https://www.norelleperfumes.com/terms" },
 };
 
 export default function TermsPage() {

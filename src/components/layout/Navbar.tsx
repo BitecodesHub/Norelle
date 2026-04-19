@@ -152,7 +152,7 @@ export default function Navbar() {
                           </Link>
                         )}
                         <button
-                          onClick={() => { signOut(); setUserMenuOpen(false); }}
+                          onClick={() => { signOut({ callbackUrl: "/" }); setUserMenuOpen(false); }}
                           className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-charcoal transition-colors font-sans border-t border-tan"
                         >
                           Sign Out
@@ -250,7 +250,7 @@ export default function Navbar() {
                   {session?.user ? (
                     <>
                       <Link href="/account" onClick={() => setMobileOpen(false)} className="text-sm font-sans text-mocha hover:text-cream transition-colors">My Account</Link>
-                      <button onClick={() => signOut()} className="text-left text-sm font-sans text-red-500">Sign Out</button>
+                      <button onClick={() => signOut({ callbackUrl: "/" })} className="text-left text-sm font-sans text-red-500">Sign Out</button>
                     </>
                   ) : (
                     <>

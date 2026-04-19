@@ -6,6 +6,11 @@ export interface IProductNote {
   base: string;
 }
 
+export interface IProductVariant {
+  size: string;
+  price: number;
+}
+
 export interface IProduct extends Document {
   title: string;
   slug: string;
@@ -21,6 +26,7 @@ export interface IProduct extends Document {
   featured: boolean;
   rating: number;
   reviewCount: number;
+  variants?: IProductVariant[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -55,6 +61,12 @@ const ProductSchema = new Schema<IProduct>(
     featured: { type: Boolean, default: false },
     rating: { type: Number, default: 0, min: 0, max: 5 },
     reviewCount: { type: Number, default: 0 },
+    variants: [
+      {
+        size: { type: String, required: true },
+        price: { type: Number, required: true, min: 0 },
+      },
+    ],
   },
   { timestamps: true }
 );

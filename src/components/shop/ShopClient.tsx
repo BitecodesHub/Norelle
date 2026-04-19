@@ -202,6 +202,7 @@ export default function ShopClient({
                           src={product.images[0]}
                           alt={`${product.title} - ${CATEGORY_LABELS[product.category] ?? product.category} by Norelle | Buy Online Ahmedabad`}
                           fill
+                          loading="eager"
                           className="object-cover transition-transform duration-700 group-hover:scale-110"
                           sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,25vw"
                         />

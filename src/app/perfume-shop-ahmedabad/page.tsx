@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     "best perfume store Gujarat",
     "natural perfume Ahmedabad",
   ],
-  alternates: { canonical: "https://norelle.in/perfume-shop-ahmedabad" },
+  alternates: { canonical: "https://www.norelleperfumes.com/perfume-shop-ahmedabad" },
 };
 
 const storeSchema = localBusinessSchema({
@@ -38,8 +38,8 @@ const storeSchema = localBusinessSchema({
 });
 
 const pageBreadcrumbs = breadcrumbSchema([
-  { name: "Home", url: "https://norelle.in" },
-  { name: "Perfume Shop Ahmedabad", url: "https://norelle.in/perfume-shop-ahmedabad" },
+  { name: "Home", url: "https://www.norelleperfumes.com" },
+  { name: "Perfume Shop Ahmedabad", url: "https://www.norelleperfumes.com/perfume-shop-ahmedabad" },
 ]);
 
 const pageFaqs = faqSchema([
@@ -181,14 +181,14 @@ export default function PerfumeShopAhmedabad() {
             </div>
             <div className="rounded-2xl overflow-hidden border border-tan/30">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.5!2d72.5876!3d23.0301!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDAxJzQ4LjQiTiA3MsKwMzUnMTUuNCJF!5e0!3m2!1sen!2sin!4v1"
+                src="https://maps.google.com/maps?q=62+Nanadan+Society+Bahai+Center+Shahpur+Ahmedabad+Gujarat+380001+India&z=17&output=embed"
                 width="100%"
                 height="350"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Norelle Perfume Shop — Shahpur, Ahmedabad"
+                title="Norelle Perfume Shop — 62 Nanadan Society, Shahpur, Ahmedabad"
               />
             </div>
           </div>

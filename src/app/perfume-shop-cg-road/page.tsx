@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "buy perfume Relief Road",
     "best perfume shop Ellisbridge",
   ],
-  alternates: { canonical: "https://norelle.in/perfume-shop-cg-road" },
+  alternates: { canonical: "https://www.norelleperfumes.com/perfume-shop-cg-road" },
 };
 
 const schema = localBusinessSchema({
@@ -24,9 +24,9 @@ const schema = localBusinessSchema({
 });
 
 const breadcrumbs = breadcrumbSchema([
-  { name: "Home", url: "https://norelle.in" },
-  { name: "Perfume Shop Ahmedabad", url: "https://norelle.in/perfume-shop-ahmedabad" },
-  { name: "CG Road", url: "https://norelle.in/perfume-shop-cg-road" },
+  { name: "Home", url: "https://www.norelleperfumes.com" },
+  { name: "Perfume Shop Ahmedabad", url: "https://www.norelleperfumes.com/perfume-shop-ahmedabad" },
+  { name: "CG Road", url: "https://www.norelleperfumes.com/perfume-shop-cg-road" },
 ]);
 
 export default function Page() {

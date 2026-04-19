@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export default function CategoryShowcase() {
   return (
-    <section className="py-24 bg-parchment">
+    <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
@@ -59,7 +59,7 @@ export default function CategoryShowcase() {
             style={{ minHeight: "clamp(400px, 60vh, 640px)" }}
           >
             <Image
-              src="/images/Norelle Handblended Perfumes.png"
+              src="/images/Norelle Handblended Perfumes.jpg"
               alt="Hand-blending fragrances at Norelle, Ahmedabad"
               fill
               className="object-cover object-center"

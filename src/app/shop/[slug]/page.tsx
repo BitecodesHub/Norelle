@@ -29,23 +29,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!product) return { title: "Product Not Found" };
 
   const categoryLabel = CATEGORY_LABELS[product.category ?? ""] ?? "Fragrance";
+  const canonicalUrl = `https://www.norelleperfumes.com/shop/${slug}`;
+  const priceStr = product.price ? ` Starting ₹${product.price.toLocaleString("en-IN")}.` : "";
+  const shortDesc = (product.description ?? "").substring(0, 150).trim();
 
   return {
-    title: `${product.title} — ${categoryLabel} | Buy Online Ahmedabad`,
-    description: `${product.description?.substring(0, 140)} Shop ${product.title} by Norelle. Free delivery in Ahmedabad.`,
+    title: `${product.title} — ${categoryLabel} by Norelle | Buy Online Ahmedabad`,
+    description: `${shortDesc} Shop ${product.title} — handcrafted ${categoryLabel.toLowerCase()} by Norelle, Ahmedabad.${priceStr} 100% natural. Free delivery.`,
     keywords: [
       product.title ?? "",
-      `buy ${categoryLabel.toLowerCase()} online`,
+      `buy ${product.title} online`,
+      `${product.title} price`,
       `${categoryLabel.toLowerCase()} Ahmedabad`,
+      `buy ${categoryLabel.toLowerCase()} online India`,
       "Norelle fragrance",
       "luxury perfume India",
+      "natural attar India",
     ].filter(Boolean),
     openGraph: {
-      images: product.images?.[0] ? [{ url: product.images[0] }] : [],
+      type: "website",
+      url: canonicalUrl,
+      siteName: "Norelle",
+      images: product.images?.[0]
+        ? [{ url: product.images[0], width: 1200, height: 1200, alt: `${product.title} — Norelle ${categoryLabel}` }]
+        : [],
       title: `${product.title} — Norelle ${categoryLabel}`,
-      description: product.description?.substring(0, 160),
+      description: shortDesc,
     },
-    alternates: { canonical: `https://norelle.in/shop/${slug}` },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.title} — Norelle ${categoryLabel}`,
+      description: shortDesc,
+      images: product.images?.[0] ? [product.images[0]] : [],
+    },
+    alternates: { canonical: canonicalUrl },
   };
 }
 
@@ -88,10 +105,10 @@ export default async function ProductPage({ params }: Props) {
   });
 
   const breadcrumbs = breadcrumbSchema([
-    { name: "Home", url: "https://norelle.in" },
-    { name: "Shop", url: "https://norelle.in/shop" },
-    { name: categoryLabel, url: `https://norelle.in/shop?category=${productData.category}` },
-    { name: productData.title, url: `https://norelle.in/shop/${productData.slug}` },
+    { name: "Home", url: "https://www.norelleperfumes.com" },
+    { name: "Shop", url: "https://www.norelleperfumes.com/shop" },
+    { name: categoryLabel, url: `https://www.norelleperfumes.com/shop?category=${productData.category}` },
+    { name: productData.title, url: `https://www.norelleperfumes.com/shop/${productData.slug}` },
   ]);
 
   return (

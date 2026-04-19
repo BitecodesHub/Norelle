@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import NAPBlock from "@/components/shared/NAPBlock";
 
 function InstagramIcon({ className }: { className?: string }) {
@@ -29,36 +30,38 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 export default function Footer() {
   return (
-    <footer className="bg-charcoal border-t border-tan">
+    <footer className="border-t border-[#d8c9b5]" style={{ background: "#EDE3D5" }}>
       <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-      <div className="max-w-7xl mx-auto px-6 py-7">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
 
           {/* Col 1: Brand + NAP */}
           <div>
-            <Link href="/" className="inline-block mb-2">
-              <span className="font-serif text-xl tracking-[0.35em] text-cream font-light">NORELLE</span>
+            <Link href="/" className="inline-block mb-4">
+              <div className="relative h-14 w-44">
+                <Image src="/images/Logo.png" alt="Norelle" fill className="object-contain object-left brightness-0" />
+              </div>
             </Link>
-            <p className="text-cream/60 font-sans text-xs leading-relaxed mb-3">
+            <p className="text-[#4a3728] font-sans text-sm leading-relaxed mb-4">
               Luxury handcrafted perfumes and natural attars in Ahmedabad. 100% natural, free delivery.
             </p>
-            <NAPBlock className="mb-3" />
+            <NAPBlock className="mb-4" />
             <a
               href="https://wa.me/919428767709?text=Hi%20Norelle!"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-xs font-sans text-[#25D366] hover:text-[#20BD5A] transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-sans text-[#25D366] hover:text-[#20BD5A] transition-colors"
             >
-              <WhatsAppIcon className="w-4 h-4" />
+              <WhatsAppIcon className="w-5 h-5" />
               Chat on WhatsApp
             </a>
           </div>
 
           {/* Col 2: Shop */}
           <div>
-            <h4 className="font-serif text-base tracking-wider text-cream font-semibold mb-3">Shop</h4>
-            <nav className="flex flex-col gap-2">
+            <h4 className="text-lg font-semibold text-[#1C1008] mb-4 tracking-wide">Shop</h4>
+            <nav className="flex flex-col gap-3">
               {[
                 { label: "All Fragrances", href: "/shop" },
                 { label: "Perfumes", href: "/shop?category=PERFUME" },
@@ -68,7 +71,7 @@ export default function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-xs text-cream/70 hover:text-gold font-sans tracking-wide transition-colors duration-200"
+                  className="text-sm text-[#4a3728] hover:text-[#D4AF37] font-sans transition-colors duration-200"
                 >
                   {link.label}
                 </Link>
@@ -76,10 +79,10 @@ export default function Footer() {
             </nav>
           </div>
 
-          {/* Col 3: Company + Follow Us */}
+          {/* Col 3: Company */}
           <div>
-            <h4 className="font-serif text-base tracking-wider text-cream font-semibold mb-3">Company</h4>
-            <nav className="flex flex-col gap-2">
+            <h4 className="text-lg font-semibold text-[#1C1008] mb-4 tracking-wide">Company</h4>
+            <nav className="flex flex-col gap-3">
               {[
                 { label: "About Us", href: "/about" },
                 { label: "Contact", href: "/contact" },
@@ -89,32 +92,43 @@ export default function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-xs text-cream/70 hover:text-gold font-sans tracking-wide transition-colors duration-200"
+                  className="text-sm text-[#4a3728] hover:text-[#D4AF37] font-sans transition-colors duration-200"
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
-            <div className="flex items-center gap-3 mt-4">
-              <span className="text-latte hover:text-gold transition-colors duration-200 cursor-pointer" aria-label="Instagram">
-                <InstagramIcon className="w-4 h-4" />
-              </span>
-              <span className="text-latte hover:text-gold transition-colors duration-200 cursor-pointer" aria-label="Facebook">
-                <FacebookIcon className="w-4 h-4" />
-              </span>
-              <span className="text-cream/40 font-sans text-[10px]">Coming soon</span>
+            <div className="flex items-center gap-4 mt-6">
+              <a
+                href="https://www.instagram.com/norelleperfumes"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#4a3728] hover:text-[#D4AF37] transition-colors duration-200"
+                aria-label="Norelle on Instagram"
+              >
+                <InstagramIcon className="w-5 h-5" />
+              </a>
+              <a
+                href="https://www.facebook.com/norelleperfumes"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#4a3728] hover:text-[#D4AF37] transition-colors duration-200"
+                aria-label="Norelle on Facebook"
+              >
+                <FacebookIcon className="w-5 h-5" />
+              </a>
             </div>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="mt-5 pt-4 border-t border-tan/50 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-[11px] text-latte font-sans">
+        <div className="mt-10 pt-5 border-t border-[#d8c9b5]/60 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <p className="text-sm text-[#6b4f3a] font-sans">
             © {new Date().getFullYear()} Norelle · Shahpur, Ahmedabad · All rights reserved
           </p>
-          <div className="flex items-center gap-4">
-            <Link href="/privacy" className="text-[11px] text-latte/80 hover:text-gold font-sans transition-colors duration-200">Privacy Policy</Link>
-            <Link href="/terms" className="text-[11px] text-latte/80 hover:text-gold font-sans transition-colors duration-200">Terms</Link>
+          <div className="flex items-center gap-5">
+            <Link href="/privacy" className="text-sm text-[#6b4f3a] hover:text-[#D4AF37] font-sans transition-colors duration-200">Privacy Policy</Link>
+            <Link href="/terms" className="text-sm text-[#6b4f3a] hover:text-[#D4AF37] font-sans transition-colors duration-200">Terms</Link>
           </div>
         </div>
       </div>

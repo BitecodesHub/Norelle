@@ -14,6 +14,11 @@ interface Review {
   createdAt: string;
 }
 
+interface ProductVariant {
+  size: string;
+  price: number;
+}
+
 interface Product {
   _id: string;
   title: string;
@@ -29,6 +34,7 @@ interface Product {
   rating: number;
   reviewCount: number;
   stock: number;
+  variants?: ProductVariant[];
 }
 
 const categoryLabel: Record<string, string> = {
@@ -44,16 +50,30 @@ export default function ProductDetail({ product, reviews }: { product: Product; 
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<"notes" | "ingredients" | "reviews">("notes");
   const [copied, setCopied] = useState(false);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
+    product.variants?.length ? product.variants[0] : null
+  );
   const { addItem } = useCartStore();
+
+  const activePrice = selectedVariant ? selectedVariant.price : product.price;
 
   const handleAddToCart = () => {
     if (product.stock === 0) return;
-    addItem({ id: product._id, slug: product.slug, title: product.title, image: product.images[0] ?? "", price: product.price, quantity });
-    toast.success(`${product.title} added to cart`);
+    const cartId = selectedVariant ? `${product._id}__${selectedVariant.size}` : product._id;
+    addItem({
+      id: cartId,
+      slug: product.slug,
+      title: product.title,
+      image: product.images[0] ?? "",
+      price: activePrice,
+      quantity,
+      size: selectedVariant?.size,
+    });
+    toast.success(`${product.title}${selectedVariant ? ` (${selectedVariant.size})` : ""} added to cart`);
   };
 
   const discount = product.comparePrice
-    ? Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)
+    ? Math.round(((product.comparePrice - activePrice) / product.comparePrice) * 100)
     : 0;
 
   return (
@@ -138,7 +158,7 @@ export default function ProductDetail({ product, reviews }: { product: Product; 
 
           {/* Price */}
           <div className="flex items-baseline gap-4 mb-6">
-            <span className="font-serif text-4xl text-gold">₹{product.price.toLocaleString("en-IN")}</span>
+            <span className="font-serif text-4xl text-gold">₹{activePrice.toLocaleString("en-IN")}</span>
             {product.comparePrice && (
               <span className="text-xl text-latte line-through font-sans">₹{product.comparePrice.toLocaleString("en-IN")}</span>
             )}
@@ -147,6 +167,29 @@ export default function ProductDetail({ product, reviews }: { product: Product; 
           <div className="h-px bg-tan mb-6" />
 
           <p className="text-mocha font-sans text-base leading-8 mb-8">{product.description}</p>
+
+          {/* Size Variants */}
+          {product.variants && product.variants.length > 0 && (
+            <div className="mb-6">
+              <span className="text-sm text-mocha font-sans tracking-wider uppercase block mb-3">Size</span>
+              <div className="flex flex-wrap gap-3">
+                {product.variants.map((v) => (
+                  <button
+                    key={v.size}
+                    onClick={() => setSelectedVariant(v)}
+                    className={`px-5 py-2.5 rounded-xl border font-sans text-sm font-medium transition-all duration-200 ${
+                      selectedVariant?.size === v.size
+                        ? "border-gold bg-gold/10 text-cream"
+                        : "border-tan bg-charcoal text-mocha hover:border-gold/50 hover:text-cream"
+                    }`}
+                  >
+                    {v.size}
+                    <span className="ml-2 text-gold text-xs">₹{v.price}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Quantity */}
           <div className="flex items-center gap-4 mb-6">

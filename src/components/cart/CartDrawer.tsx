@@ -66,7 +66,7 @@ export default function CartDrawer() {
                 <AnimatePresence mode="popLayout">
                   {items.map((item) => (
                     <motion.div
-                      key={item.id}
+                      key={item.size ? `${item.id}__${item.size}` : item.id}
                       layout
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -84,17 +84,22 @@ export default function CartDrawer() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-serif text-sm text-cream truncate">{item.title}</h3>
+                        {item.size && (
+                          <span className="inline-block text-[10px] font-sans text-mocha bg-charcoal border border-tan rounded-md px-2 py-0.5 mt-1">
+                            {item.size}
+                          </span>
+                        )}
                         <p className="text-gold text-sm font-sans mt-1">{formatPrice(item.price)}</p>
                         <div className="flex items-center gap-2 mt-2">
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={() => updateQuantity(item.size ? `${item.id}__${item.size}` : item.id, item.quantity - 1)}
                             className="w-6 h-6 rounded-full bg-tan/60 hover:bg-tan transition-colors flex items-center justify-center"
                           >
                             <Minus className="w-3 h-3 text-cream" />
                           </button>
                           <span className="text-sm text-cream font-sans w-4 text-center">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() => updateQuantity(item.size ? `${item.id}__${item.size}` : item.id, item.quantity + 1)}
                             className="w-6 h-6 rounded-full bg-tan/60 hover:bg-tan transition-colors flex items-center justify-center"
                           >
                             <Plus className="w-3 h-3 text-cream" />
@@ -102,7 +107,7 @@ export default function CartDrawer() {
                         </div>
                       </div>
                       <button
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeItem(item.size ? `${item.id}__${item.size}` : item.id)}
                         className="text-latte hover:text-red-500 transition-colors self-start p-1"
                       >
                         <Trash2 className="w-4 h-4" />

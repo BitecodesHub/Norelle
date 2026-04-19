@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "Norelle's privacy policy — how we collect, use, and protect your personal information when you shop for luxury perfumes and attars.",
-  alternates: { canonical: "https://norelle.in/privacy" },
+  alternates: { canonical: "https://www.norelleperfumes.com/privacy" },
 };
 
 export default function PrivacyPage() {
