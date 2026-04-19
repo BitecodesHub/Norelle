@@ -48,7 +48,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: p.updatedAt ?? new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.85,
-      images: p.images?.length ? p.images.slice(0, 5) : undefined,
+      images: p.images?.length 
+        ? p.images.slice(0, 5).map(img => {
+            const urlString = img.startsWith("http") ? img : `${BASE}${img}`;
+            // Encode the URL properly in case of spaces in the filename
+            try {
+              const urlObj = new URL(urlString);
+              return urlObj.toString();
+            } catch (e) {
+              return encodeURI(urlString);
+            }
+          })
+        : undefined,
     }));
   } catch {
     // DB not available at build time — products will be missing from sitemap
